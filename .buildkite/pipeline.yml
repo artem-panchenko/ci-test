@@ -1,0 +1,8 @@
+steps:
+  - label: Example Test
+    command: echo "Hello!"
+  - label: Example Build
+    command: sleep 10
+  - wait
+  - label: Example post build
+    command: date
