@@ -10,7 +10,7 @@ on:
 
 jobs:
   bump:
-    if: ${{ github.event.pull_request.merged == 'true' || github.event_name == 'workflow_dispatch' }}
+    #if: ${{ github.event.pull_request.merged == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,7 +25,8 @@ jobs:
 
       - name: Push a version bump commit to ${{ github.base_ref }}
         run: |
-          gist status
+          echo "pull_request.merged: ${{ github.event.pull_request.merged }}"
+          git status
           git log -1
           git config user.name "auto-release"
           git config user.email "artem@panchenko.email"
