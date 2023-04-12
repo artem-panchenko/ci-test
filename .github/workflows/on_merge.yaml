@@ -26,6 +26,8 @@ jobs:
 
       - name: Push a version bump commit to ${{ github.base_ref }}
         run: |
+          gist status
+          git log -1
           git config user.name "auto-release"
           git config user.email "artem@panchenko.email"
           echo 123 > version.txt
