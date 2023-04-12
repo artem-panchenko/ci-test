@@ -5,8 +5,7 @@ on:
      - master
     types:
      - closed
-    paths:
-     - '!some_file.txt'
+
 
 
 jobs:
