@@ -5,12 +5,14 @@ on:
      - master
     types:
      - closed
+    paths:
+     - 'some_file.txt'
 
 
 
 jobs:
   bump:
-    #if: ${{ github.event.pull_request.merged == 'true' || github.event_name == 'workflow_dispatch' }}
+    if: github.event.pull_request.merged == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,7 +31,7 @@ jobs:
           git status
           git log -1
           git config user.name "auto-release"
-          git config user.email "artem@panchenko.email"
+          git config user.email "auto-release@panchenko.email"
           echo 123 > version.txt
           git add version.txt
           git commit -m "Automatic Release: 123"
