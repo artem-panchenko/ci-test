@@ -6,7 +6,8 @@ on:
     types:
      - closed
     paths:
-     - 'some_file.txt'
+     - '*'
+     - '!version.txt'
 
 
 
