@@ -32,7 +32,7 @@ jobs:
           git log -1
           git config user.name "auto-release"
           git config user.email "auto-release@panchenko.email"
-          echo 123 > version.txt
+          echo ${{github.run_number}} > version.txt
           git add version.txt
-          git commit -m "Automatic Release: 123"
+          git commit -m "Automatic Release: ${{github.run_number}}"
           git push origin ${{ github.base_ref }}
