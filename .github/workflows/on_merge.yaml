@@ -2,13 +2,10 @@ name: version
 on:
   pull_request:
     branches:
-     - $default-branch
+     - master
     types:
      - closed
-    paths:
-     - '!some_file.txt'
-  workflow_dispatch:
-permissions: read-all
+
 
 jobs:
   bump:
