@@ -17,16 +17,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
 
-      - name: Dump GitHub context
-        run: echo "${{ github.event.pull_request._links.html.href }}"
+      - name: Install gh
+        run: sudo apt update && sudo apt install -y gh
+
+      - name: Get changed files
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION_FILE: version.txt
+        run: |
+          changed_files=$(gh pr view "${{ github.event.pull_request._links.html.href }}" --json files -q '.files[].path')
+          echo "Changed files in "${{ github.event.pull_request._links.html.href }}: ${changed_files}"
+          if echo "${changed_files}" | grep -qF "${VERSION_FILE}"; then
+              echo '::set-output name=CHANGED::true'
+          else
+              echo '::set-output name=CHANGED::false'
+          fi
 
       - name: Set up python
         uses: actions/setup-python@v4
+        if: steps.version.outputs.CHANGED == 'true'
         with:
           python-version: "3.11"
 
       - name: Push a version bump commit to ${{ github.base_ref }}
+        if: steps.version.outputs.CHANGED == 'true'
         run: |
           echo "pull_request.merged: ${{ github.event.pull_request.merged }}"
           git status
