@@ -31,20 +31,20 @@ jobs:
         run: |
           changed_files=$(gh pr view "${{ github.event.pull_request._links.html.href }}" --json files -q '.files[].path')
           echo "Changed files in ${{ github.event.pull_request._links.html.href }}: ${changed_files}"
+          version_changed=false
           if echo "${changed_files}" | grep -qF "${VERSION_FILE}"; then
-              echo '::set-output name=CHANGED::true'
-          else
-              echo '::set-output name=CHANGED::false'
+              version_changed=true
           fi
+          echo "CHANGED=${version_changed}" >> $GITHUB_OUTPUT
 
       - name: Set up python
         uses: actions/setup-python@v4
-        if: steps.version.outputs.CHANGED == 'true'
+        if: steps.version.outputs.CHANGED == 'false'
         with:
           python-version: "3.11"
 
       - name: Push a version bump commit to ${{ github.base_ref }}
-        if: steps.version.outputs.CHANGED == 'true'
+        if: steps.version.outputs.CHANGED == 'false'
         run: |
           echo "pull_request.merged: ${{ github.event.pull_request.merged }}"
           git status
