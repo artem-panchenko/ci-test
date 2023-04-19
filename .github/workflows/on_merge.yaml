@@ -30,7 +30,7 @@ jobs:
           VERSION_FILE: version.txt
         run: |
           changed_files=$(gh pr view "${{ github.event.pull_request._links.html.href }}" --json files -q '.files[].path')
-          echo "Changed files in "${{ github.event.pull_request._links.html.href }}: ${changed_files}"
+          echo "Changed files in ${{ github.event.pull_request._links.html.href }}: ${changed_files}"
           if echo "${changed_files}" | grep -qF "${VERSION_FILE}"; then
               echo '::set-output name=CHANGED::true'
           else
