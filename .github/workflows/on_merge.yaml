@@ -9,17 +9,19 @@ on:
      - '**'
      - '!version.txt'
 
-
-
 jobs:
   bump:
     if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    concurrency: on_merge_master
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.base_ref }}
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
       - name: Set up python
         uses: actions/setup-python@v4
